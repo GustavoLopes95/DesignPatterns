@@ -15,34 +15,39 @@ var monsterType = {
 }
 
 var Slime = function() {
-  this._type = monsterType.SLIME;
-  this._grow = 'sblosh sblosh';
+  var _type = monsterType.SLIME;
+  var _grow = 'sblosh sblosh';
+
+  return {
+    getType() {
+      return _type;
+    },
+  
+    getGrow() {
+      return _grow;
+    }
+  }
 }
 
 Slime.prototype = {
-  getType: function() {
-    return this._type;
-  },
-
-  getGrow: function () {
-    return this._grow;
-  }
+  
 }
 
 var Wolf = function() {
-  this._type = monsterType.WOLF;
-  this._grow = 'A-woooooooooo!';
-}
+  var _type = monsterType.WOLF;
+  var _grow = 'A-woooooooooo!';
 
-Wolf.prototype = {
-  getType: function() {
-    return this._type;
-  },
-
-  getGrow: function () {
-    return this._grow;
+  return {
+    getType() {
+      return _type;
+    },
+  
+    getGrow() {
+      return _grow;
+    }
   }
 }
+
 
 var MonsterFactory = function () {
 };
@@ -55,7 +60,7 @@ MonsterFactory.prototype = {
       case monsterType.WOLF:
         return new Wolf();
       default:
-          console.log("The monster don't exists");
+          console.log("The monster does not exists");
         break;
         
     }

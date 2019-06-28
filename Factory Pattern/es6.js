@@ -23,38 +23,39 @@ class MonsterFactory {
       case monsterType.WOLF:
         return new Wolf();
       default:
-        throw "The monster don't exists";
+        throw "The monster does not exists";
     }
   }
 }
 
 class Slime {
+  
   constructor() {
-    this._type = monsterType.SLIME;
-    this._grow = 'sblosh sblosh';
-  }
+    const _type = monsterType.SLIME;
+    const _grow = 'sblosh sblosh';
 
-  getType() {
-    return this._type;
-  }
-
-  getGrow() {
-    return this._grow;
+    this.getType = function() {
+        return _type;
+    }
+    
+    this.getGrow = function () {
+        return _grow;
+    }
   }
 }
 
 class Wolf {
   constructor() {
-    this._type = monsterType.WOLF;
-    this._grow = 'A-woooooooooo!';
-  }
+    const _type = monsterType.WOLF;
+    const _grow = 'A-woooooooooo!';
 
-  getType() {
-    return this._type;
-  }
-
-  getGrow() {
-    return this._grow;
+    this.getType = function() {
+        return _type;
+    }
+    
+    this.getGrow = function() {
+        return _grow;
+    }
   }
 }
 
@@ -69,10 +70,12 @@ class Main {
 
     const monsterFactory = new MonsterFactory();
     let _monsterType;
-    if(Math.floor(Math.random() * 100)  < 50) {
+    if(Math.floor(Math.random() * 100)  > 50 &&  Math.floor(Math.random() * 100)  < 60) {
       _monsterType = monsterType.SLIME;
-    } else {
+    } else if(Math.floor(Math.random() * 100)  > 60) {
       _monsterType = monsterType.WOLF;
+    } else {
+      _monsterType = 'Nothing';
     }
 
     const monster = monsterFactory.createMonster(_monsterType);
