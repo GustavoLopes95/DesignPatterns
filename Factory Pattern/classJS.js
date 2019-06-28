@@ -55,7 +55,9 @@ MonsterFactory.prototype = {
       case monsterType.WOLF:
         return new Wolf();
       default:
-        throw "The monster don't exists";
+          console.log("The monster don't exists");
+        break;
+        
     }
   }
 }
@@ -66,19 +68,23 @@ var Main = function () {
 
 Main.prototype = {
   init: function() {
-    console.log(`${player.name} walks randomly through the forest when...`);
+    console.log(player.name + ' walks randomly through the forest when...');
 
     const monsterFactory = new MonsterFactory();
     let _monsterType;
-    if(Math.floor(Math.random() * 100)  < 50) {
+    if(Math.floor(Math.random() * 100)  > 50 &&  Math.floor(Math.random() * 100)  < 60) {
       _monsterType = monsterType.SLIME;
-    } else {
+    } else if(Math.floor(Math.random() * 100)  > 60) {
       _monsterType = monsterType.WOLF;
+    } else {
+      _monsterType = 'Nothing';
     }
 
     const monster = monsterFactory.createMonster(_monsterType);
-
-    console.log(`A ${monster.getType()} appeared ${monster.getGrow()}`);
+    
+    if(monster) {
+      console.log('A ' + monster.getType() + ' appeared ' + monster.getGrow());
+    }
   }
 }
 
