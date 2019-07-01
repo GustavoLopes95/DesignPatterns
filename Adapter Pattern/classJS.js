@@ -18,7 +18,7 @@ Warrior.prototype.defense = function() {
   return 'All damage received was absorbed';
 }
 
-var Magic = function(){
+var Magic = function() {
   this.atkBase = 15;
   this.hp = 250;
 }
