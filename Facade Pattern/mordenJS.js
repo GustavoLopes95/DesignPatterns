@@ -15,10 +15,10 @@ class GooglePlugin {
 
   get resources() {
     return [
-      {id: 1, data: 'content resource one'},
-      {id: 2, data: 'content resource two'},
-      {id: 3, data: 'content resource three'},
-      {id: 4, data: 'content resource four'},
+      {id: 1, data: 'Google content resource one'},
+      {id: 2, data: 'Google content resource two'},
+      {id: 3, data: 'Google content resource three'},
+      {id: 4, data: 'Google content resource four'},
     ]
   }
 
@@ -34,10 +34,10 @@ class ApplePlugin {
      * @public
      */
     this.data = [
-      {id: 1, data: 'content resource one'},
-      {id: 2, data: 'content resource two'},
-      {id: 3, data: 'content resource three'},
-      {id: 4, data: 'content resource four'}
+      {id: 1, data: 'Apple content resource one'},
+      {id: 2, data: 'Apple content resource two'},
+      {id: 3, data: 'Apple content resource three'},
+      {id: 4, data: 'Apple content resource four'}
     ]
   }
 
@@ -49,22 +49,28 @@ class ApplePlugin {
 //Adpter Interface
 class GoogleImplementation {
   constructor() {
-    const _ = new GooglePlugin();
-    this.resources = _.resources || [];
-    this.fetch = _.getData.bind(_);
+    if(!GoogleImplementation.instance) {
+      const _ = new GooglePlugin();
+      this.resources = _.resources || [];
+      this.fetch = _.getData.bind(_);
+      GoogleImplementation.instance = this;
+    }
 
-    return this;
+    return GoogleImplementation.instance;
   }
 }
 
 //Adpter Interface
 class AppleImplementation {
   constructor() {
-    const _ = new ApplePlugin();
-    this.resources = _.data || [];
-    this.fetch = _.retriveResource.bind(_);
+    if(!AppleImplementation.instance) {
+      const _ = new ApplePlugin();
+      this.resources = _.data || [];
+      this.fetch = _.retriveResource.bind(_);
+      AppleImplementation.instance = this;
+    }
 
-    return this;
+    return AppleImplementation.instance;
   }
 }
 
@@ -121,9 +127,9 @@ class Main {
   }
 
   init() {
-    const vendorResource = new VendorAccess('Google', 1);
+    const vendorResource = new VendorAccess('Apple', 1);
 
-    vendorResource.get(2)
+    vendorResource.get(4)
       .then(result => console.log(result))
       .catch(error => console.log(error));
   }
