@@ -5,8 +5,13 @@
  * complex system feature
  */
 
-class VendorPlugin {
-  constructor() {}
+const VENDORS = {
+  GOOGLE: 'Google',
+  APPLE: 'Apple',
+}
+
+//Vendor Plugin
+class GooglePlugin {
 
   get resources() {
     return [
@@ -17,19 +22,88 @@ class VendorPlugin {
     ]
   }
 
-  fetch(id) {
+  getData(id) {
     return this.resources.find(data => data.id === id);
   }
 }
 
-class PluginFacade {
+//Vendor Plugin
+class ApplePlugin {
+  constructor() {
+    /**
+     * @public
+     */
+    this.data = [
+      {id: 1, data: 'content resource one'},
+      {id: 2, data: 'content resource two'},
+      {id: 3, data: 'content resource three'},
+      {id: 4, data: 'content resource four'}
+    ]
+  }
+
+  retriveResource(id) {
+    return this.data.find(data => data.id === id);
+  }
+}
+
+//Adpter Interface
+class GoogleImplementation {
+  constructor() {
+    const _ = new GooglePlugin();
+    this.resources = _.resources || [];
+    this.fetch = _.getData.bind(_);
+
+    return this;
+  }
+}
+
+//Adpter Interface
+class AppleImplementation {
+  constructor() {
+    const _ = new ApplePlugin();
+    this.resources = _.data || [];
+    this.fetch = _.retriveResource.bind(_);
+
+    return this;
+  }
+}
+
+class VendorAccess {
+  constructor(vendor) {
+    let _;
+    switch (vendor) {
+      case VENDORS.GOOGLE:
+        _ =  new GoogleImplementation();
+        break;
+      case VENDORS.APPLE:
+        _ = new AppleImplementation();
+        break;
+      default:
+        throw `The vendor ${vendor} does not exists`;
+    }
+
+    //Make access to property read-only
+    Object.defineProperties(this, {
+      resources: {
+        get: () => _.resources
+      },
+      fetch: {
+        value: _.fetch
+      }
+    });
+
+    
+    //Preserve object integration
+    Object.seal(this);
+    Object.freeze(this);
+  }
 
   get(id) {
-    return this._tryGet(this._findResource, id);
+    return this._tryGet(this.fetch, id);
   }
 
   _tryGet(func, id) {
-    const result = func.call(this, id);
+    const result = func.call(this.fetch, id);
 
     return new Promise((resolve, reject) => !!result
       ? resolve(result)
@@ -39,11 +113,6 @@ class PluginFacade {
   get _error() {
     return { status: 404, mensage: 'Nothing resource find with this id' };
   }
-
-  _findResource(id) {
-    const vendorService = new VendorPlugin();
-    return vendorService.fetch(id);
-  }
 }
 
 class Main {
@@ -52,8 +121,9 @@ class Main {
   }
 
   init() {
-    const vendorResource = new PluginFacade();
-    vendorResource.get(3)
+    const vendorResource = new VendorAccess('Google', 1);
+
+    vendorResource.get(2)
       .then(result => console.log(result))
       .catch(error => console.log(error));
   }
