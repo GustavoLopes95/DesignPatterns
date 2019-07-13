@@ -114,14 +114,21 @@ const user = {
   name: 'Jonathan J.',
   lastName: 'Workman',
 }
-// Simulation database access
-const getSalary = (user) => {
+
+const getUser = ({id = null} = {}) => {  
+  if(!id) return {};
   const DATABASE = [
     { userID: 1, salaray: 130000 },
     { userID: 2, salaray: 70000 },
     { userID: 3, salaray: 5500 },
   ]
-  const userData = DATABASE.find((row) => row.userID === user.id);
+  const  _user = DATABASE.find((row) => row.userID === user.id);
+  return _user || {};
+}
+
+// Simulation database access
+const getSalary = (user) => {
+  const userData = getUser();  
   return userData && userData.salaray || null;
 }
 
